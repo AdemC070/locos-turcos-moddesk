@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Locos Turcos ModDesk</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#141c30;--line:#293650;--text:#f3f6ff;--muted:#a3afc8;--blue:#5486ff;--green:#39d6a0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px Arial,sans-serif}
+header{padding:22px 18px;background:#11192b;border-bottom:1px solid var(--line)}
+.brand{font-size:22px;font-weight:800}.brand span{color:var(--blue)}
+header p{color:var(--muted);margin:8px 0 0;font-size:13px}
+.layout{display:flex;min-height:calc(100vh - 90px)}
+nav{width:215px;padding:18px 12px;border-right:1px solid var(--line);flex-shrink:0}
+nav button{display:block;width:100%;text-align:left;padding:13px;margin:3px 0;background:transparent;color:var(--muted);border:0;border-radius:9px;font-size:14px}
+nav button.active,nav button:hover{background:#243455;color:white}
+main{padding:24px;width:100%;max-width:1150px;margin:auto}
+h1{font-size:26px;margin:0 0 8px}h2{font-size:18px}
+.muted{color:var(--muted);line-height:1.5}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0}
+.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px}
+.stat{font-size:28px;font-weight:bold;margin-top:12px}
+.label{font-size:13px;color:var(--muted)}
+.panel{margin:15px 0}
+button,.btn{cursor:pointer}
+.primary{background:var(--blue);color:white;border:0;padding:11px 15px;border-radius:8px;font-weight:bold}
+.secondary{background:#26334c;color:white;border:1px solid var(--line);padding:10px 13px;border-radius:8px}
+input,select,textarea{width:100%;padding:12px;background:#0b1222;color:white;border:1px solid var(--line);border-radius:8px;margin:6px 0 13px;font:inherit}
+textarea{min-height:85px;resize:vertical}
+label{font-size:13px;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:13px 8px;border-bottom:1px solid var(--line);font-size:13px}
+th{color:var(--muted)}
+.pill{display:inline-block;border-radius:20px;background:#26334c;padding:5px 9px;font-size:12px}
+.open{color:#ffcf70}.done{color:var(--green)}
+.section{display:none}.section.active{display:block}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.empty{padding:25px;text-align:center;color:var(--muted)}
+footer{padding:18px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:700px){
+ .layout{display:block}nav{width:100%;display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:8px}
+ nav button{white-space:nowrap;width:auto;flex-shrink:0;padding:11px}
+ main{padding:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .card{padding:13px}.stat{font-size:24px}
+ table{min-width:520px}.tablewrap{overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">LOCOS <span>TURCOS</span> / ModDesk</div>
+  <p>Moderator Control Center · Community Management</p>
+</header>
+<div class="layout">
+<nav>
+<button class="active" data-page="dashboard">▦ Dashboard</button>
+<button data-page="reports">⚑ Meldingen</button>
+<button data-page="team">♙ Moderator-team</button>
+<button data-page="reviews">★ Beoordelingen</button>
+<button data-page="logs">☷ Actielogboek</button>
+</nav>
+<main>
+<section id="dashboard" class="section active">
+<h1>ModDesk Dashboard</h1>
+<p class="muted">Welkom bij het controlecentrum van Locos Turcos.</p>
+<div class="grid">
+<div class="card"><div class="label">Open meldingen</div><div class="stat" id="openCount">0</div></div>
+<div class="card"><div class="label">Afgehandeld</div><div class="stat" id="doneCount">0</div></div>
+<div class="card"><div class="label">Moderators</div><div class="stat" id="teamCount">0</div></div>
+<div class="card"><div class="label">Acties geregistreerd</div><div class="stat" id="logCount">0</div></div>
+</div>
+<div class="panel">
+<h2>Snelle acties</h2>
+<div class="actions">
+<button class="primary" onclick="showPage('reports')">Meldingen bekijken</button>
+<button class="secondary" onclick="showPage('team')">Team bekijken</button>
+<button class="secondary" onclick="showPage('reviews')">Beoordelingen</button>
+</div>
+</div>
+<div class="panel">
+<h2>Recente activiteit</h2>
+<div id="recent" class="muted">Nog geen acties geregistreerd.</div>
+</div>
+</section>
+
+<section id="reports" class="section">
+<h1>Meldingen</h1>
+<p class="muted">Registreer een melding en houd de afhandeling bij.</p>
+<div class="panel">
+<h2>Nieuwe melding toevoegen</h2>
+<form id="reportForm">
+<label for="reporter">Naam melder</label>
+<input id="reporter" required maxlength="80" placeholder="Naam van de melder">
+<label for="subject">Onderwerp</label>
+<input id="subject" required maxlength="120" placeholder="Bijvoorbeeld: gedrag in de chat">
+<label for="details">Beschrijving</label>
+<textarea id="details" required maxlength="1000" placeholder="Beschrijf wat er is gebeurd"></textarea>
+<button class="primary" type="submit">Melding opslaan</button>
+</form>
+</div>
+<div class="panel">
+<h2>Alle meldingen</h2>
+<div class="tablewrap"><table><thead><tr><th>Melder</th><th>Onderwerp</th><th>Status</th><th>Actie</th></tr></thead><tbody id="reportRows"></tbody></table></div>
+</div>
+</section>
+
+<section id="team" class="section">
+<h1>Moderator-team</h1>
+<p class="muted">Voeg teamleden toe aan het lokale overzicht.</p>
+<div class="panel">
+<h2>Teamlid toevoegen</h2>
+<form id="teamForm">
+<label for="member">Gebruikersnaam</label>
+<input id="member" required maxlength="60" placeholder="Moderatornaam">
+<label for="role">Rol</label>
+<select id="role"><option>Moderator</option><option>Hoofdmoderator</option><option>Eigenaar</option></select>
+<button class="primary" type="submit">Teamlid toevoegen</button>
+</form>
+</div>
+<div class="panel">
+<h2>Teamleden</h2>
+<div id="teamRows" class="muted">Nog geen teamleden toegevoegd.</div>
+</div>
+</section>
+
+<section id="reviews" class="section">
+<h1>Beoordelingen</h1>
+<p class="muted">Eigenaar en hoofdmoderators kunnen hier de prestaties van teamleden registreren.</p>
+<div class="panel">
+<h2>Nieuwe beoordeling</h2>
+<form id="reviewForm">
+<label for="reviewMember">Moderator</label>
+<input id="reviewMember" required maxlength="60" placeholder="Naam moderator">
+<label for="reviewer">Beoordeeld door</label>
+<select id="reviewer"><option>Eigenaar</option><option>Hoofdmoderator</option></select>
+<label for="score">Score</label>
+<select id="score"><option value="5">5 - Uitstekend</option><option value="4">4 - Goed</option><option value="3">3 - Voldoende</option><option value="2">2 - Verbetering nodig</option><option value="1">1 - Onvoldoende</option></select>
+<label for="feedback">Toelichting</label>
+<textarea id="feedback" required maxlength="1000" placeholder="Geef feedback en verbeterpunten"></textarea>
+<button class="primary" type="submit">Beoordeling opslaan</button>
+</form>
+</div>
+<div class="panel"><h2>Opgeslagen beoordelingen</h2><div id="reviewRows" class="muted">Nog geen beoordelingen.</div></div>
+</section>
+
+<section id="logs" class="section">
+<h1>Actielogboek</h1>
+<p class="muted">Bekijk welke acties in deze sessie zijn geregistreerd.</p>
+<div class="panel" id="logRows">Nog geen acties geregistreerd.</div>
+<button class="secondary" onclick="exportData()">Gegevens exporteren als JSON</button>
+</section>
+</main>
+</div>
+<footer>Locos Turcos ModDesk · Eerste prototype · Gegevens worden lokaal in deze pagina bewaard.</footer>
+<script>
+const reports=[];
+const team=[];
+const reviews=[];
+const logs=[];
+let nextId=1;
+function logAction(message){
+ logs.unshift({time:new Date().toLocaleString('nl-NL'),message});
+ render();
+}
+function showPage(id){
+ document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+document.getElementById('reportForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ reports.unshift({id:nextId++,reporter:reporter.value,subject:subject.value,details:details.value,status:'Open'});
+ logAction('Nieuwe melding geregistreerd: '+reports[0].subject);
+ e.target.reset();
+});
+document.getElementById('teamForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ if(team.some(m=>m.name.toLowerCase()===member.value.trim().toLowerCase())){
+ alert('Dit teamlid staat al in het overzicht.');return;
+ }
+ team.push({name:member.value.trim(),role:role.value});
+ logAction('Teamlid toegevoegd: '+member.value.trim());
+ e.target.reset();
+});
+document.getElementById('reviewForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ reviews.unshift({member:reviewMember.value.trim(),reviewer:reviewer.value,score:score.value,feedback:feedback.value,time:new Date().toLocaleDateString('nl-NL')});
+ logAction('Beoordeling toegevoegd voor '+reviewMember.value.trim());
+ e.target.reset();
+});
+function closeReport(id){
+ const r=reports.find(x=>x.id===id);
+ if(r){r.status='Afgehandeld';logAction('Melding afgehandeld: '+r.subject);}
+}
+function render(){
+ openCount.textContent=reports.filter(r=>r.status==='Open').length;
+ doneCount.textContent=reports.filter(r=>r.status==='Afgehandeld').length;
+ teamCount.textContent=team.length;
+ logCount.textContent=logs.length;
+ reportRows.innerHTML=reports.length?reports.map(r=>`<tr><td>${esc(r.reporter)}</td><td>${esc(r.subject)}</td><td><span class="pill ${r.status==='Open'?'open':'done'}">${r.status}</span></td><td>${r.status==='Open'?`<button class="secondary" onclick="closeReport(${r.id})">Afhandelen</button>`:'Klaar'}</td></tr>`).join(''):'<tr><td colspan="4">Nog geen meldingen.</td></tr>';
+ teamRows.innerHTML=team.length?team.map(m=>`<div class="panel"><strong>${esc(m.name)}</strong><p class="muted">${esc(m.role)}</p></div>`).join(''):'Nog geen teamleden toegevoegd.';
+ reviewRows.innerHTML=reviews.length?reviews.map(r=>`<div class="panel"><strong>${esc(r.member)}</strong> · ${r.score}/5<p class="muted">Beoordeeld door ${esc(r.reviewer)} · ${r.time}</p><p>${esc(r.feedback)}</p></div>`).join(''):'Nog geen beoordelingen.';
+ logRows.innerHTML=logs.length?logs.map(l=>`<div class="panel"><strong>${esc(l.message)}</strong><p class="muted">${l.time}</p></div>`).join(''):'Nog geen acties geregistreerd.';
+ recent.innerHTML=logs.length?esc(logs[0].message)+'<br><br><span class="muted">'+logs[0].time+'</span>':'Nog geen acties geregistreerd.';
+}
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function exportData(){
+ const data=JSON.stringify({reports,team,reviews,logs},null,2);
+ const blob=new Blob([data],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url;a.download='locos-turcos-moddesk.json';a.click();
+ URL.revokeObjectURL(url);
+}
+render();
+</script>
+</body>
+</html>
