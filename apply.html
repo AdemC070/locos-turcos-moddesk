@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solliciteren | Locos Turcos</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px 14px;background:#0b1020;color:#f4f6ff;font:16px Arial,sans-serif}
+main{max-width:520px;margin:30px auto;background:#141c30;border:1px solid #293650;border-radius:16px;padding:24px}
+h1{font-size:25px}p{color:#aab6ce;line-height:1.5}
+label{display:block;margin-top:16px;font-size:14px}
+input,textarea,select{width:100%;padding:12px;margin-top:7px;border:1px solid #35425e;border-radius:8px;background:#0b1020;color:white;font:inherit}
+textarea{min-height:110px}
+button{margin-top:20px;width:100%;padding:14px;border:0;border-radius:8px;background:#5486ff;color:white;font-weight:bold;font-size:16px}
+#message{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main>
+<h1>Locos Turcos</h1>
+<p>Solliciteer als moderator. Vul het formulier eerlijk in. Het team beoordeelt je aanvraag.</p>
+<form id="application">
+<label for="name">Gebruikersnaam</label>
+<input id="name" maxlength="80" required autocomplete="nickname">
+
+<label for="age">Leeftijd</label>
+<input id="age" type="number" min="13" max="100" required>
+
+<label for="experience">Moderatorervaring</label>
+<textarea id="experience" maxlength="2000" required placeholder="Heb je eerder een community geholpen?"></textarea>
+
+<label for="motivation">Waarom wil je moderator worden?</label>
+<textarea id="motivation" minlength="10" maxlength="3000" required placeholder="Vertel waarom jij geschikt bent"></textarea>
+
+<button id="submit" type="submit">Sollicitatie versturen</button>
+<p id="message" role="status"></p>
+</form>
+</main>
+<script>
+const SUPABASE_URL = "https://zavtgevegijoiwebcydc.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_cmpbsdVRDNKI1M4AZ3wBxQ_k8pCWkwd";
+
+document.getElementById("application").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const button = document.getElementById("submit");
+  const message = document.getElementById("message");
+  button.disabled = true;
+  message.textContent = "Je sollicitatie wordt verstuurd...";
+
+  try {
+    if (SUPABASE_URL.includes("VUL_HIER") ||
+        SUPABASE_KEY.includes("VUL_HIER")) {
+      throw new Error("Vul eerst je Supabase-gegevens in de code in.");
+    }
+
+    const response = await fetch(
+      SUPABASE_URL.replace(/\/+$/, "") +
+      "/rest/v1/moddesk_applications",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          applicant_name: document.getElementById("name").value.trim(),
+          age: Number(document.getElementById("age").value),
+          experience: document.getElementById("experience").value.trim(),
+          motivation: document.getElementById("motivation").value.trim()
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("De server accepteerde de aanvraag niet (HTTP " + response.status + ").");
+    }
+
+    e.target.reset();
+    message.textContent = "Je sollicitatie is verstuurd! Bedankt voor je aanmelding.";
+  } catch (error) {
+    message.textContent = "Versturen mislukt: " + error.message +
+      " Controleer je instellingen en probeer opnieuw.";
+  } finally {
+    button.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
