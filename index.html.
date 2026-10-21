@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090a10">
+<title>Locos Turcos ModDesk</title>
+<style>
+:root{--red:#ff1738;--bg:#090a10;--panel:#121620;--line:#293044;--muted:#a2abc0;--green:#29d99a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f7f7fb;font:15px Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{padding:19px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#0d1018;position:sticky;top:0;z-index:2}
+.logo{font-size:21px;font-weight:900}.logo span{color:var(--red)}
+.wrap{max-width:1050px;margin:auto;padding:18px}
+nav{display:flex;gap:8px;overflow:auto;padding:15px 0}
+nav button,.secondary{background:#1b2130;color:white;border:1px solid var(--line);padding:11px 14px;border-radius:9px;white-space:nowrap}
+nav button.active{background:#48101d;border-color:var(--red)}
+.primary{background:var(--red);color:white;border:0;padding:12px 17px;border-radius:9px;font-weight:bold}
+.hero{padding:28px 0}
+.eyebrow{color:#ff758a;text-transform:uppercase;font-weight:bold;letter-spacing:2px;font-size:12px}
+h1{font-size:clamp(30px,6vw,48px);margin:10px 0}
+h1 span{color:var(--red)}
+p,.muted{color:var(--muted);line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:linear-gradient(145deg,#151a26,#10131b);border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:14px;min-width:0}
+.stat{color:var(--muted);font-size:13px}.number{font-size:30px;font-weight:800;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row{padding:13px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.row:last-child{border:0}
+.badge{border-radius:30px;padding:6px 9px;background:#242d40;font-size:12px;white-space:nowrap}
+.badge.green{background:#103d30;color:#78f4c0}
+.badge.red{background:#451521;color:#ff9cab}
+.badge.yellow{background:#493514;color:#ffdf87}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:bold}
+input,select,textarea{width:100%;padding:12px;background:#090e17;border:1px solid #374157;border-radius:8px;color:white}
+textarea{min-height:105px;resize:vertical}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.notice{padding:13px;border:1px solid #65402a;background:#211914;border-radius:9px;color:#ffdcad;font-size:13px;line-height:1.5;margin:15px 0}
+.hidden{display:none!important}
+.listitem{padding:14px 0;border-bottom:1px solid var(--line)}
+.listitem:last-child{border:0}
+footer{text-align:center;padding:28px 10px;color:var(--muted);font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}form{grid-template-columns:1fr}.field.full{grid-column:auto}header{padding:14px}.wrap{padding:13px}.card{padding:14px}.number{font-size:25px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">LOCOS<span>TURCOS</span><div style="font-size:11px;color:#a2abc0;font-weight:normal">MODDESK</div></div>
+  <button class="primary" onclick="view('apply')">Solliciteren +</button>
+</header>
+<div class="wrap">
+<nav>
+<button class="active" data-page="home" onclick="view('home')">Dashboard</button>
+<button data-page="apply" onclick="view('apply')">Solliciteren</button>
+<button data-page="applications" onclick="view('applications')">Sollicitaties</button>
+<button data-page="mods" onclick="view('mods')">Moderators</button>
+</nav>
+
+<main id="home" class="page">
+<div class="hero">
+<div class="eyebrow">Samen sterker</div>
+<h1>Locos Turcos <span>ModDesk</span></h1>
+<p>Het centrale platform voor nieuwe moderators. Solliciteer voor YouTube Live, TikTok Live, Discord, Twitch of Kick en help onze community veilig en gezellig te houden.</p>
+<button class="primary" onclick="view('apply')">Start je sollicitatie →</button>
+</div>
+<div class="grid">
+<div class="card"><div class="stat">Sollicitaties</div><div class="number" id="total">0</div></div>
+<div class="card"><div class="stat">In behandeling</div><div class="number" id="pending">0</div></div>
+<div class="card"><div class="stat">Goedgekeurd</div><div class="number" id="approved">0</div></div>
+<div class="card"><div class="stat">Platforms</div><div class="number">5</div></div>
+</div>
+<div class="two" style="margin-top:17px">
+<div class="card">
+<h3>Hoe werkt het?</h3>
+<div class="row"><span>01 · Sollicitatie invullen</span><span class="badge">Start</span></div>
+<div class="row"><span>02 · Beoordeling door het team</span><span class="badge yellow">Review</span></div>
+<div class="row"><span>03 · Beslissing</span><span class="badge green">Resultaat</span></div>
+</div>
+<div class="card">
+<h3>Ondersteunde platforms</h3>
+<div class="row">▶ YouTube Live</div>
+<div class="row">♪ TikTok Live</div>
+<div class="row">◉ Discord</div>
+<div class="row">▣ Twitch</div>
+<div class="row">K Kick</div>
+</div>
+</div>
+<div class="notice">Let op: dit is een prototype. Er is nog geen beveiligde eigenaar-login of online database. Gebruik alleen testgegevens totdat de beveiliging en online opslag zijn ingesteld.</div>
+</main>
+
+<main id="apply" class="page hidden">
+<div class="hero"><div class="eyebrow">Moderator application</div><h1>Word een <span>Locos Mod</span></h1><p>Vul alle verplichte vragen eerlijk in.</p></div>
+<div class="card">
+<form id="form">
+<div class="field"><label for="name">Naam of voornaam *</label><input id="name" maxlength="70" required placeholder="Je naam"></div>
+<div class="field"><label for="nick">Gebruikersnaam *</label><input id="nick" maxlength="70" required placeholder="Je nickname"></div>
+<div class="field"><label for="age">Leeftijdsgroep *</label><select id="age" required><option value="">Kies</option><option>13–15</option><option>16–17</option><option>18+</option></select></div>
+<div class="field"><label for="platform">Platform *</label><select id="platform" required><option value="">Kies</option><option>YouTube Live</option><option>TikTok Live</option><option>Discord</option><option>Twitch</option><option>Kick</option><option>Meerdere platforms</option></select></div>
+<div class="field"><label for="experience">Ervaring *</label><select id="experience" required><option>Geen ervaring, ik wil leren</option><option>Een beetje ervaring</option><option>Ervaren moderator</option></select></div>
+<div class="field"><label for="time">Beschikbaarheid *</label><select id="time" required><option value="">Kies</option><option>Doordeweeks</option><option>Avonden</option><option>Weekenden</option><option>Flexibel</option></select></div>
+<div class="field full"><label for="motivation">Waarom wil je moderator worden? *</label><textarea id="motivation" required minlength="20" maxlength="1000" placeholder="Vertel waarom jij bij het team past..."></textarea></div>
+<div class="field full"><label for="spam">Wat doe je bij spam of reclame? *</label><textarea id="spam" required minlength="10" maxlength="700" placeholder="Hoe handel je rustig en eerlijk?"></textarea></div>
+<div class="field full"><label for="fight">Wat doe je als twee kijkers ruzie krijgen? *</label><textarea id="fight" required minlength="10" maxlength="700" placeholder="Leg uit hoe je de situatie oplost..."></textarea></div>
+<div class="field full"><label for="strength">Wat zijn jouw sterke punten? *</label><textarea id="strength" required minlength="10" maxlength="700" placeholder="Bijvoorbeeld rustig blijven of goed samenwerken..."></textarea></div>
+<div class="field full"><label><input type="checkbox" id="honest" required style="width:auto"> Ik heb mijn antwoorden eerlijk ingevuld.</label></div>
+</form>
+<div class="notice">Deze demo bewaart inzendingen alleen in de browser van dit apparaat. De sollicitatie wordt nog niet naar de eigenaar of hoofdmods verstuurd. Vul geen wachtwoorden of gevoelige gegevens in.</div>
+<div class="actions"><button class="primary" onclick="submitForm()">Sollicitatie opslaan</button><button class="secondary" onclick="view('home')">Annuleren</button></div>
+<p id="message" role="status"></p>
+</div>
+</main>
+
+<main id="applications" class="page hidden">
+<div class="hero"><div class="eyebrow">Teamruimte · prototype</div><h1>Sollicitaties</h1><p>Bekijk testinzendingen en wijzig de status. Er is nog geen accountbeveiliging.</p></div>
+<div class="card">
+<div class="actions" style="margin-bottom:15px">
+<select id="filter" onchange="render()" style="width:auto;max-width:100%">
+<option value="Alle">Alle statussen</option><option>Nieuw</option><option>In behandeling</option><option>Goedgekeurd</option><option>Afgewezen</option>
+</select>
+<button class="secondary" onclick="clearData()">Wis testgegevens</button>
+</div>
+<div id="list"></div>
+</div>
+</main>
+
+<main id="mods" class="page hidden">
+<div class="hero"><div class="eyebrow">Teambeheer</div><h1>Moderators</h1><p>De rollen die we later aan beveiligde accounts koppelen.</p></div>
+<div class="card">
+<div class="row"><div><b>Eigenaar</b><div class="muted">Volledig beheer en eindbeslissing</div></div><span class="badge red">Owner</span></div>
+<div class="row"><div><b>Hoofdmoderator</b><div class="muted">Sollicitaties beoordelen met toegekende rechten</div></div><span class="badge yellow">Head mod</span></div>
+<div class="row"><div><b>Moderator</b><div class="muted">Community modereren op toegewezen platforms</div></div><span class="badge green">Mod</span></div>
+<div class="notice">Dit zijn alleen rolbeschrijvingen. Niemand heeft via deze pagina een echte account of toegangsrechten.</div>
+</div>
+</main>
+<footer>LOCOS TURCOS · MODDESK · MOBIELVRIENDELIJK</footer>
+</div>
+<script>
+const KEY='locosturcos_moddesk_demo';
+function read(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function write(a){localStorage.setItem(KEY,JSON.stringify(a))}
+function view(id){
+document.querySelectorAll('.page').forEach(x=>x.classList.toggle('hidden',x.id!==id));
+document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));
+if(id==='applications')render();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function submitForm(){
+const f=document.getElementById('form');
+if(!f.reportValidity())return;
+if(!document.getElementById('honest').checked){alert('Bevestig eerst dat je antwoorden eerlijk zijn.');return}
+const a=read();
+a.unshift({
+id:Date.now(),
+name:document.getElementById('name').value.trim(),
+nick:document.getElementById('nick').value.trim(),
+age:document.getElementById('age').value,
+platform:document.getElementById('platform').value,
+experience:document.getElementById('experience').value,
+time:document.getElementById('time').value,
+motivation:document.getElementById('motivation').value.trim(),
+spam:document.getElementById('spam').value.trim(),
+fight:document.getElementById('fight').value.trim(),
+strength:document.getElementById('strength').value.trim(),
+status:'Nieuw',date:new Date().toLocaleDateString('nl-NL')
+});
+write(a);
+f.reset();
+document.getElementById('message').textContent='Testsollicitatie lokaal opgeslagen. Deze is niet online verzonden.';
+stats();
+}
+function stats(){
+const a=read();
+document.getElementById('total').textContent=a.length;
+document.getElementById('pending').textContent=a.filter(x=>x.status==='Nieuw'||x.status==='In behandeling').length;
+document.getElementById('approved').textContent=a.filter(x=>x.status==='Goedgekeurd').length;
+}
+function render(){
+const filter=document.getElementById('filter').value;
+const a=read().filter(x=>filter==='Alle'||x.status===filter);
+const list=document.getElementById('list');
+if(!a.length){list.innerHTML='<p class="muted">Geen testsollicitaties gevonden.</p>';stats();return}
+list.innerHTML=a.map(x=>`<div class="listitem">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>${esc(x.name)} · ${esc(x.nick)}</b><span class="badge ${x.status==='Goedgekeurd'?'green':x.status==='Afgewezen'?'red':x.status==='In behandeling'?'yellow':''}">${esc(x.status)}</span></div>
+<p class="muted">${esc(x.platform)} · ${esc(x.age)} · ${esc(x.date)}</p>
+<p><b>Motivatie:</b> ${esc(x.motivation)}</p>
+<p><b>Spam:</b> ${esc(x.spam)}</p>
+<p><b>Ruzie:</b> ${esc(x.fight)}</p>
+<p><b>Sterke punten:</b> ${esc(x.strength)}</p>
+<p class="muted">Ervaring: ${esc(x.experience)} · Beschikbaar: ${esc(x.time)}</p>
+<div class="actions"><select aria-label="Status" onchange="status(${x.id},this.value)" style="width:auto"><option ${x.status==='Nieuw'?'selected':''}>Nieuw</option><option ${x.status==='In behandeling'?'selected':''}>In behandeling</option><option ${x.status==='Goedgekeurd'?'selected':''}>Goedgekeurd</option><option ${x.status==='Afgewezen'?'selected':''}>Afgewezen</option></select><button class="secondary" onclick="removeApp(${x.id})">Verwijderen</button></div>
+</div>`).join('');
+stats();
+}
+function status(id,s){write(read().map(x=>x.id===id?{...x,status:s}:x));render()}
+function removeApp(id){write(read().filter(x=>x.id!==id));render()}
+function clearData(){if(confirm('Alle lokale testsollicitaties verwijderen?')){write([]);render()}}
+stats();
+</script>
+</body>
+</html>
