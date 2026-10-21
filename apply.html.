@@ -40,7 +40,7 @@ button{margin-top:20px;width:100%;padding:14px;border:0;border-radius:8px;backgr
 </main>
 <script>
 const SUPABASE_URL = "VUL_HIER_JE_PROJECT_URL_IN";
-const SUPABASE_KEY = "VUL_HIER_JE_PUBLISHABLE_KEY_IN";
+const SUPABASE_KEY = "sb_publishable_cmpbsdVRDNKI1M4AZ3wBxQ_k8pCWkwd";
 
 document.getElementById("application").addEventListener("submit", async (e) => {
   e.preventDefault();
